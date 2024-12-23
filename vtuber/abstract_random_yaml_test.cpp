@@ -1,32 +1,35 @@
 #include <string>
 #include <memory>
 #include <gtest/gtest.h>
-#include <glog/logging.h>
 #include "abstract_random.h"
 #include "abstract_random_yaml.h"
+#define GLOG_USE_GLOG_EXPORT
+#include <glog/logging.h>
 #include "yaml-cpp/yaml.h"
 using namespace std;
 const string patterns[]{
-// pattern 1
-R"(RandomBool:
+	// pattern 1
+	R"(RandomBool:
   possibility1: 0.7)",
-// pattern 2
-R"(RandomBool:)",
-// pattern 3
-R"(RepeatBool:
+	// pattern 2
+	R"(RandomBool:)",
+	// pattern 3
+	R"(RepeatBool:
   ratio0: 3
   ratio1: 7)",
-// pattern 4
-R"(RepeatBool:)",
+	// pattern 4
+	R"(RepeatBool:)",
 };
 
 void PlayRandom(
-	BoolPattern& gen, const string& name,
-	unsigned total, unsigned accepted_lo, unsigned accepted_hi
-) {
+	BoolPattern &gen, const string &name,
+	unsigned total, unsigned accepted_lo, unsigned accepted_hi)
+{
 	unsigned count = 0;
-	for (int i = 0; i < total; ++i) {
-		if (gen()) {
+	for (int i = 0; i < total; ++i)
+	{
+		if (gen())
+		{
 			++count;
 		}
 	}
@@ -35,7 +38,8 @@ void PlayRandom(
 }
 
 using namespace random_factory;
-TEST(TestFactory, FromYamlRamdomBool) {
+TEST(TestFactory, FromYamlRamdomBool)
+{
 	unique_ptr<BoolPattern> gen0(FromYamlNode(YAML::Load(patterns[0])));
 	unique_ptr<BoolPattern> gen1(FromYamlNode(YAML::Load(patterns[1])));
 	unique_ptr<BoolPattern> gen2(FromYamlNode(YAML::Load(patterns[2])));

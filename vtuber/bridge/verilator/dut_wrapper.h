@@ -2,6 +2,7 @@
 
 #include "connector.h"
 #include <functional>
+#define GLOG_USE_GLOG_EXPORT
 #include <glog/logging.h>
 #include <memory>
 #include <systemc>
@@ -11,26 +12,31 @@
 using namespace std;
 using namespace sc_core;
 
-template <typename DUT> SC_MODULE(DUTWrapper) {
+template <typename DUT>
+SC_MODULE(DUTWrapper)
+{
 public:
   const unsigned period_ps = 2;
   vector<shared_ptr<Connector<DUT>>> connectors;
   bool dump_waveform;
 
-  void register_connector(shared_ptr<Connector<DUT>> connector) {
+  void register_connector(shared_ptr<Connector<DUT>> connector)
+  {
     this->connectors.push_back(connector);
   }
 
   SC_HAS_PROCESS(DUTWrapper);
   DUTWrapper(const sc_module_name &name, const bool dump = false)
       : sc_module(name), ctx(new VerilatedContext), dut(new DUT(ctx.get())),
-        tfp(new VerilatedFstC) {
+        tfp(new VerilatedFstC)
+  {
     dump_waveform = dump;
     Init();
     SC_THREAD(Executor);
   }
 
-  ~DUTWrapper() {
+  ~DUTWrapper()
+  {
     tfp->flush();
     tfp->close();
   }
@@ -40,15 +46,19 @@ public:
   unique_ptr<DUT> dut;
   unique_ptr<VerilatedFstC> tfp;
 
-  void Step() {
+  void Step()
+  {
     dut->eval();
-    if (dump_waveform) {
+    if (dump_waveform)
+    {
       tfp->dump(ctx->time());
     }
   }
 
-  void Init() {
-    if (dump_waveform) {
+  void Init()
+  {
+    if (dump_waveform)
+    {
       // initialize waveform
       Verilated::traceEverOn(true);
       ctx->traceEverOn(true);
@@ -74,24 +84,30 @@ public:
     ctx->timeInc(period_ps);
   }
 
-  void Executor() {
-    while (true) {
+  void Executor()
+  {
+    while (true)
+    {
       wait(this->clk.posedge_event());
 
-      for (auto &connector : this->connectors) {
+      for (auto &connector : this->connectors)
+      {
         connector->before_clk(dut.get());
       }
       dut->clk = true;
       dut->eval();
 
       bool update = false;
-      for (auto &connector : this->connectors) {
+      for (auto &connector : this->connectors)
+      {
         update |= connector->after_clk(dut.get());
       }
-      if (update) {
+      if (update)
+      {
         dut->eval();
       }
-      if (dump_waveform) {
+      if (dump_waveform)
+      {
         tfp->dump(ctx->time());
       }
       ctx->timeInc(period_ps);
@@ -103,9 +119,11 @@ public:
     }
   }
 
-  bool is_pass() {
+  bool is_pass()
+  {
     bool is_pass = true;
-    for (const auto &connector : this->connectors) {
+    for (const auto &connector : this->connectors)
+    {
       is_pass &= connector->is_pass(dut.get());
     }
     return is_pass;
