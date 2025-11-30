@@ -1,3 +1,5 @@
+#pragma once
+
 #include "RSAMont.h"
 #include "TwoPower.h"
 #include "model_rsa.h"

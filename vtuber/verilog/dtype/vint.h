@@ -10,7 +10,12 @@
 #include <string>
 #include <type_traits>
 // Other libraries' .h files.
+#if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
 #include <immintrin.h>
+#define HAS_X86_INTRINSICS 1
+#else
+#define HAS_X86_INTRINSICS 0
+#endif
 // Your project's .h files.
 #include "verilog/dtype_base.h"
 
@@ -71,13 +76,29 @@ inline uint64_t shiftleft128(uint64_t hi, uint64_t lo, unsigned n) {
 }
 
 inline unsigned char addcarry64(uint64_t &out, uint64_t x, uint64_t y, unsigned char carry_in) {
-	// Note: Impelemtnation-defined, modify me when necessary
+#if HAS_X86_INTRINSICS
 	return _addcarry_u64(carry_in, x, y, reinterpret_cast<unsigned long long*>(&out));
+#else
+	// Portable implementation
+	uint64_t sum = x + y;
+	uint64_t sum_with_carry = sum + carry_in;
+	out = sum_with_carry;
+	// Check for overflow
+	return (sum < x) || (sum_with_carry < sum);
+#endif
 }
 
 inline unsigned char subborrow64(uint64_t &out, uint64_t x, uint64_t y, unsigned char carry_in) {
-	// Note: Impelemtnation-defined, modify me when necessary
+#if HAS_X86_INTRINSICS
 	return _subborrow_u64(carry_in, x, y, reinterpret_cast<unsigned long long*>(&out));
+#else
+	// Portable implementation
+	uint64_t diff = x - y;
+	uint64_t diff_with_borrow = diff - carry_in;
+	out = diff_with_borrow;
+	// Check for underflow
+	return (diff > x) || (diff_with_borrow > diff);
+#endif
 }
 
 } // namespace detail
