@@ -4,3 +4,5 @@
 *.vcd
 *.fst
 *.fst.hier
+/test_data
+.DS_Store
