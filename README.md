@@ -1,18 +1,18 @@
-RSA256
+tt_decompose
 ======
 
-RSA256 is a demo project to use [Verilator](https://www.veripool.org/verilator/) to help validate the hardware design.
-It implements the [RSA public key cryptosystem](https://en.wikipedia.org/wiki/RSA_(cryptosystem)) with key size of 256 bits.
+tt_decompose is a demo project to use [Verilator](https://www.veripool.org/verilator/) to help validate the hardware design.
+It implements the [Tensor-Train Decomposition](https://users.math.msu.edu/users/iwenmark/Teaching/CMSE890/TENSOR_oseledets2011.pdf).
 
 # Directory Structure
 
 The repository contains the following directories:
 
-* cmodel: The software model of RSA256.
+* cmodel: The software model of tt_decompose.
 * docker: The Dockerfile and script to build the Docker container.
 * include: The header file for both cmodel and systemc.
-* systemc: The SystemC model of RSA256.
-* verilog: The SystemVerilog implementation of RSA256.
+* systemc: The SystemC model of tt_decompose.
+* verilog: The SystemVerilog implementation of tt_decompose.
 * vtuber: The directory for the utilities of C++ verilog datatype, and adapter for Verilator.
 
 You can refer to these directories for the relevant files and resources needed to build and run the application.
