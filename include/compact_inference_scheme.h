@@ -1,6 +1,12 @@
 #pragma once
+#include <vector>
 
 struct Matrix {
+    int constructor(int r, int c) {
+        data = new int[r * c];
+        rows = r;
+        cols = c;
+    };
     int rows;
     int cols;
     int* data; // 使用一維陣列模擬二維，計算位址較快
@@ -21,5 +27,5 @@ Matrix matMul(const Matrix& G_tilde, const Matrix& V_prime); // V_h = Gh * V'h+1
 
 void transpose(Matrix& V);
 
-void reshape(Matrix& V, int new_rows, int new_cols);
+void reshape(std::vector<Matrix>& X, int new_rows, int new_cols);
 

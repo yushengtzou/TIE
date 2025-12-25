@@ -1,5 +1,6 @@
 #include <iostream>
 #include "compact_inference_scheme.h"
+#include <vector>
 
 Matrix compact_inference_scheme(
     const Matrix& X, // 原始輸入數據 X
@@ -23,19 +24,42 @@ Matrix transform(const Matrix& V, int h, const int m[], const int n[], const int
 
 }
 
-Matrix matMul(const Matrix& G_tilde, const Matrix& V_prime) {
-    
-}
+Matrix matMul(const Matrix& A, const Matrix& B) {
+    // 矩陣乘法前提：A 的列數必須等於 B 的行數
+    if (A.cols != B.rows) {
+        throw std::invalid_argument("Dimension mismatch for matrix multiplication.");
+    }
 
-void transpose(Matrix& V) {
-    for (int i = 0; i < V.rows; ++i) {
-        for (int j = i + 1; j < V.cols; ++j) {
-            std::swap(V.data[i * V.cols + j], V.data[j * V.cols + i]);
+    Matrix C;
+    C.constructor(A.rows, B.cols);
+
+    // 初始化 result 為 0
+    std::fill(C.data, C.data + (C.rows * C.cols), 0.0);
+
+    for (int i = 0; i < A.rows; ++i) {
+        for (int k = 0; k < A.cols; ++k) {
+            for (int j = 0; j < B.cols; ++j) {
+                // 標準公式：C[i][j] += A[i][k] * B[k][j]
+                C.data[i * C.cols + j] += A.data[i * A.cols + k] * B.data[k * B.cols + j];
+            }
         }
     }
+    return C;
 }
 
-void reshape(Matrix& V, int new_rows, int new_cols) {
+Matrix transpose(const Matrix& A) {
+    Matrix result;
+    result.constructor(A.rows, A.cols); 
+    for (int i = 0; i < A.rows; ++i) {
+        for (int j = 0; j < A.cols; ++j) {
+            // 原本的 (i, j) 放到新矩陣的 (j, i)
+            result.data[j * A.rows + i] = A.data[i * A.cols + j];
+        }
+    }
+    return result;
+}
+
+void reshape(std::vector<Matrix>& X, int new_rows, int new_cols) {
     
 }
 
