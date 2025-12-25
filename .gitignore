@@ -6,3 +6,4 @@
 *.fst.hier
 /test_data
 .DS_Store
+/weight_compress/weights
