@@ -21,7 +21,7 @@ def extract_layer_weights(model, layer_name):
                 return weights, layer_type
     raise ValueError(f"Layer {layer_name} not found or not Conv2d/Linear")
 
-def save_tensor_for_matlab(weights, filename_prefix, layer_type):
+def save_layer_weights(weights, filename_prefix, layer_type):
     """
     PyTorch stores weights in row-major (C) order: [out, in, h, w]
     """
@@ -101,9 +101,9 @@ def main():
             
             weights, ltype = extract_layer_weights(model, layer_name)
             
-            # Save for MATLAB
+            # Save file
             filename = f"weights/mobilenet_{layer_name.replace('.', '_')}"
-            shape = save_tensor_for_matlab(weights, filename, ltype)
+            shape = save_layer_weights(weights, filename, ltype)
             
             if ltype == 'Conv':
                 conv_count += 1
@@ -120,8 +120,8 @@ def main():
     print(f"Extraction Complete! ({extracted_count}/{len(all_layers)} layers)")
     print("=" * 70)
     print()
-    print(f"  • Convolutional layers: {conv_count} (will use Tucker decomposition)")
-    print(f"  • Fully connected layers: {fc_count} (will use TT decomposition)")
+    print(f"  • Convolutional layers: {conv_count}")
+    print(f"  • Fully connected layers: {fc_count}")
     print()
 
 if __name__ == "__main__":

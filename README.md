@@ -1,11 +1,11 @@
-TIE: Tensor Inference Engine
+ETTE: Efficient Tensor Train Engine
 ======
 
 # Directory Structure
 
 The repository contains the following directories:
 
-* cmodel: The software model of TIE's `compact_inference_scheme`.
+* cmodel: The software model of ETTE's `compact_inference_scheme`.
 * docker: The Dockerfile and script to build the Docker container.
 * include: The header file for both cmodel and systemc.
 * systemc: The SystemC model of `compact_inference_scheme`.

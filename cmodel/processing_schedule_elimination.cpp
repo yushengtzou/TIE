@@ -1,9 +1,16 @@
+/*
+Implementation of 'processing_schedule_elimination' function
+References: Gong, Y., Yin, M., Huang, L., Xiao, J., Sui, Y., Deng, C., & Yuan, B. (2023, June). ETTE: Efficient tensor-train-based computing engine for deep neural networks. In Proceedings of the 50th Annual International Symposium on Computer Architecture (pp. 1-13).
+Author: Yu-Sheng Tzou
+Date: 2025.12.25
+*/
+
 #include <iostream>
-#include "compact_inference_scheme.h"
+#include "processing_schedule_elimination.h"
 #include <vector>
 
-Matrix compact_inference_scheme(
-    const Matrix& X, // 原始輸入數據 X
+Matrix processing_schedule_elimination(
+    const std::vector<Matrix>& X, // 原始輸入數據 X
     const std::vector<Matrix>& G, // d 個張量核心矩陣 G1...Gd
     int d,                        // 維度個數
     const int m[], 
@@ -59,7 +66,10 @@ Matrix transpose(const Matrix& A) {
     return result;
 }
 
-void reshape(std::vector<Matrix>& X, int new_rows, int new_cols) {
+// reshape X(j1, ..., jd) into X_prime(p,q)
+// p = j_d
+// q = summation l=1~d-1 (j_l * product i=1~l-1 (n_i))
+Matrix reshape(std::vector<Matrix>& X, int new_rows, int new_cols) {
     
 }
 
